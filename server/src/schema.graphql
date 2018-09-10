@@ -1,0 +1,5 @@
+#Below we define all of our type definitions for our GraphQL Schema
+
+type Query {
+  test: String
+}
