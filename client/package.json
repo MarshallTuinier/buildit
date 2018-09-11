@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@reach/router": "^1.1.1",
     "@smooth-ui/core-sc": "^5.1.1",
     "apollo-boost": "^0.1.15",
     "graphql": "^14.0.2",

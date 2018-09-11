@@ -17,7 +17,7 @@ const CAPTURE_EMAIL = gql`
   }
 `;
 
-class Welcome extends Component {
+class SignUp extends Component {
   state = {
     email: "",
     submitted: false,
@@ -73,13 +73,6 @@ class Welcome extends Component {
               size="lg"
               props={{ isEmailValid: this.state.isEmailValid }}
             />
-            <Button
-              variant="info"
-              onClick={event => this.handleSubmit(event, captureEmail)}
-              size="lg"
-            >
-              Create my BuildIt account
-            </Button>
             {!this.state.isEmailValid && (
               <span
                 style={{
@@ -100,6 +93,14 @@ class Welcome extends Component {
                 It looks like this email already exists. Try logging in.
               </span>
             )}
+            <Button
+              variant="info"
+              onClick={event => this.handleSubmit(event, captureEmail)}
+              size="lg"
+            >
+              Create my BuildIt account
+            </Button>
+
             {this.state.submitted &&
               !this.state.doesEmailAlreadyExist && (
                 <Fragment>
@@ -140,4 +141,4 @@ const StyledInput = styled(Input)`
     props.isEmailValid ? "none" : "0px 0px 6px 8px rgba(255,0,0,0.5)"};
 `;
 
-export default Welcome;
+export default SignUp;

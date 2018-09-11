@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-
-import Welcome from "./components/Welcome";
+import { Router } from "@reach/router";
+import SignUp from "./components/SignUp";
 import { ApolloProvider } from "react-apollo";
 import ApolloClient from "apollo-boost";
 
@@ -10,7 +10,9 @@ class App extends Component {
   render() {
     return (
       <ApolloProvider client={client}>
-        <Welcome />
+        <Router>
+          <SignUp path="/" />
+        </Router>
       </ApolloProvider>
     );
   }
