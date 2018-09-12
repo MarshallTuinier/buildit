@@ -1,114 +1,127 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
-import { enableExperimentalFragmentVariables } from "graphql-tag";
 import styled from "styled-components";
-import { validateEmail } from "../helpers/helpers";
-import { Button, Input, Typography, Label } from "@smooth-ui/core-sc";
+import { Button, Input, Label, Typography } from "@smooth-ui/core-sc";
 
-// Create the GQL mutation for adding the email
+// GQL mutation for registering
 
-const CAPTURE_EMAIL = gql`
-  mutation($email: String!) {
-    captureEmail(email: $email) {
-      id
-      email
+const SIGN_UP = gql`
+  mutation Signup(
+    $id: String!
+    $firstname: String!
+    $lastname: String!
+    $password: String!
+  ) {
+    signup(
+      id: $id
+      firstname: $firstname
+      lastname: $lastname
+      password: $password
+    ) {
+      token
+      user {
+        id
+        email
+      }
     }
   }
 `;
 
 class SignUp extends Component {
   state = {
-    email: "",
-    submitted: false,
-    isEmailValid: true,
-    doesEmailAlreadyExist: false
+    firstname: "",
+    lastname: "",
+    password: "",
+    showErrorMessage: false
   };
 
-  handleChange = event => {
-    this.setState({
-      email: event.target.value
-    });
+  saveUserData = (id, token) => {
+    localStorage.setItem("user-id", id);
+    localStorage.setItem("user-token", token);
   };
 
-  handleSubmit = (event, captureEmail) => {
+  handleSubmit = (event, signup) => {
+    const { firstname, lastname, password } = this.state;
     event.preventDefault();
-    if (!validateEmail(this.state.email)) {
-      this.setState({ isEmailValid: false });
+    if (firstname === "" || lastname === "" || password === "") {
+      this.setState({ showErrorMessage: true });
       return;
+    } else {
+      signup()
+        .then(({ data: { signup } }) => {
+          const id = signup.user.id;
+          const token = signup.token;
+          this.saveUserData(id, token);
+          //TODO Push user state to the app
+          console.log("Success!");
+        })
+        .catch(error => console.log(error));
     }
-    captureEmail()
-      .then(data => {
-        console.log(data);
-        this.setState({
-          isEmailValid: true,
-          submitted: true,
-          doesEmailAlreadyExist: false
-        });
-      })
-      .catch(error => {
-        if (error.graphQLErorrs.length >= 1) {
-          this.setState({ doesEmailAlreadyExist: true, isEmailValid: true });
-        } else {
-          console.warn("Uh oh, looks like something went wrong");
-        }
-      });
   };
 
   render() {
-    const { email } = this.state;
+    const { id } = this.props;
+    const { firstname, lastname, password } = this.state;
     return (
-      <Mutation mutation={CAPTURE_EMAIL} variables={{ email }}>
-        {(captureEmail, { data }) => (
+      <Mutation
+        mutation={SIGN_UP}
+        variables={{ id, firstname, lastname, password }}
+      >
+        {(signup, { data }) => (
           <MainBody>
-            <Typography variant="display-3">Welcome!</Typography>
-            <p>Enter your email address to start a free trial</p>
-            <Label htmlFor="email">Email</Label>
-            <StyledInput
-              id="email"
+            <Typography variant="display-3">Welcome to BuildIt!</Typography>
+            <p>Finish setting up your account</p>
+            <Label htmlFor="firstname">First Name</Label>
+            <Input
+              id="firstname"
               type="text"
-              value={this.state.inputValue}
-              onChange={this.handleChange}
-              placeholder="Please Enter an Email"
+              value={this.state.firstname}
+              onChange={event =>
+                this.setState({ firstname: event.target.value })
+              }
+              placeholder="First Name"
               size="lg"
-              props={{ isEmailValid: this.state.isEmailValid }}
             />
-            {!this.state.isEmailValid && (
-              <span
-                style={{
-                  fontWeight: "300",
-                  color: "red"
-                }}
-              >
-                Please enter a valid email
-              </span>
-            )}
-            {this.state.doesEmailAlreadyExist && (
-              <span
-                style={{
-                  fontWeight: "300",
-                  color: "red"
-                }}
-              >
-                It looks like this email already exists. Try logging in.
-              </span>
-            )}
+            <Label htmlFor="lastname">Last Name</Label>
+            <Input
+              id="lastname"
+              type="text"
+              value={this.state.lastname}
+              onChange={event =>
+                this.setState({ lastname: event.target.value })
+              }
+              placeholder="First Name"
+              size="lg"
+            />
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              value={this.state.password}
+              onChange={event =>
+                this.setState({ password: event.target.value })
+              }
+              placeholder="Password"
+              size="lg"
+            />
             <Button
               variant="info"
-              onClick={event => this.handleSubmit(event, captureEmail)}
+              onClick={event => this.handleSubmit(event, signup)}
               size="lg"
             >
-              Create my BuildIt account
+              Complete
             </Button>
-
-            {this.state.submitted &&
-              !this.state.doesEmailAlreadyExist && (
-                <Fragment>
-                  <span>Thank You!</span>
-                  <span>Please check your email.</span>
-                </Fragment>
-              )}
-            <p>Already have a BuildIt account? Log In</p>
+            {this.state.showErrorMessage && (
+              <span
+                style={{
+                  fontWeight: "300",
+                  color: "red"
+                }}
+              >
+                Please enter a first name, last name, and password.
+              </span>
+            )}
           </MainBody>
         )}
       </Mutation>
@@ -116,7 +129,7 @@ class SignUp extends Component {
   }
 }
 
-//-------------Styles--------------
+//------------styles--------------//
 
 const MainBody = styled.div`
   display: flex;
@@ -136,9 +149,6 @@ const MainBody = styled.div`
   }
 `;
 
-const StyledInput = styled(Input)`
-  box-shadow: ${({ props }) =>
-    props.isEmailValid ? "none" : "0px 0px 6px 8px rgba(255,0,0,0.5)"};
-`;
+//-------------end styles-----------//
 
 export default SignUp;
