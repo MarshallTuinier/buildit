@@ -1,10 +1,12 @@
 import React, { Component } from "react";
+import { ApolloProvider } from "react-apollo";
+import ApolloClient from "apollo-boost";
 import { Router } from "@reach/router";
+
 import InitialSignUp from "./components/InitialSignUp";
 import LogIn from "./components/LogIn";
 import SignUp from "./components/SignUp";
-import { ApolloProvider } from "react-apollo";
-import ApolloClient from "apollo-boost";
+import Main from "./components/Main";
 
 const client = new ApolloClient({});
 
@@ -16,6 +18,7 @@ class App extends Component {
           <InitialSignUp path="/" />
           <SignUp path="/signup/:id" />
           <LogIn path="/login" />
+          <Main path="/main" />
         </Router>
       </ApolloProvider>
     );

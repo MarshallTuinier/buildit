@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
 import styled from "styled-components";
 import { Button, Input, Label, Typography } from "@smooth-ui/core-sc";
+import { navigate } from "@reach/router";
 
 // GQL mutation for registering
 
@@ -53,8 +54,7 @@ class SignUp extends Component {
           const id = signup.user.id;
           const token = signup.token;
           this.saveUserData(id, token);
-          //TODO Push user state to the app
-          console.log("Success!");
+          navigate("/main");
         })
         .catch(error => console.log(error));
     }

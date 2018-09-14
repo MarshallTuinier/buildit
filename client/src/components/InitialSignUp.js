@@ -4,6 +4,7 @@ import { Mutation } from "react-apollo";
 import styled from "styled-components";
 import { validateEmail } from "../helpers/helpers";
 import { Button, Input, Typography, Label } from "@smooth-ui/core-sc";
+import { Link } from "@reach/router";
 
 // Create the GQL mutation for adding the email
 
@@ -41,7 +42,8 @@ class InitialSignUp extends Component {
         this.setState({
           isEmailValid: true,
           submitted: true,
-          doesEmailAlreadyExist: false
+          doesEmailAlreadyExist: false,
+          email: ""
         });
       })
       .catch(error => {
@@ -56,7 +58,7 @@ class InitialSignUp extends Component {
     return (
       <Mutation mutation={CAPTURE_EMAIL} variables={{ email }}>
         {(captureEmail, { data }) => (
-          <MainBody>
+          <MainBody className="page">
             <Typography variant="display-3">Welcome!</Typography>
             <p>Enter your email address to start a free trial</p>
             <Label htmlFor="email">Email</Label>
@@ -104,7 +106,10 @@ class InitialSignUp extends Component {
                   <span>Please check your email.</span>
                 </Fragment>
               )}
-            <p>Already have a BuildIt account? Log In</p>
+            <p>
+              Already have a BuildIt account?{" "}
+              <StyledLink to="/login">Log In</StyledLink>
+            </p>
           </MainBody>
         )}
       </Mutation>
@@ -135,6 +140,11 @@ const MainBody = styled.div`
 const StyledInput = styled(Input)`
   box-shadow: ${({ props }) =>
     props.isEmailValid ? "none" : "0px 0px 6px 8px rgba(255,0,0,0.5)"};
+`;
+
+const StyledLink = styled(Link)`
+  color: rgb(23, 162, 184);
+  text-decoration: none;
 `;
 
 export default InitialSignUp;

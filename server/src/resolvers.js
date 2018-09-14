@@ -5,9 +5,22 @@ const moment = require("moment");
 const { User, Team } = require("./models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
+const nodeMailer = require("nodemailer");
+const { welcomeEmail } = require("./emails");
+
+const transporter = nodeMailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.FROM_EMAIL,
+    pass: process.env.GMAIL_PASSWORD
+  }
+});
+
 const JWT_SECRET = process.env.JWT_SECRET;
 
-console.log(JWT_SECRET);
 // Grab a randmon choice from an array. In this case, it will randomly assign
 // an avatar color to a new user
 
@@ -55,10 +68,11 @@ const resolvers = {
         role: "Owner",
         status: "Pending"
       });
+      transporter.sendMail(welcomeEmail(email, user));
+
       return user;
     },
 
-    // TODO
     async signup(root, { id, firstname, lastname, password }) {
       const user = await User.findById(id);
       const common = {
@@ -86,8 +100,18 @@ const resolvers = {
       return { token, user };
     },
 
-    // TODO
-    async login(_, { email, password }) {}
+    async login(root, { email, password }) {
+      const user = await User.findOne({ email });
+      if (!user) {
+        throw new Error("No user with that email");
+      }
+      const valid = await bcrypt.compare(password, user.password);
+      if (!valid) {
+        throw new Error("Incorrect password");
+      }
+      const token = jwt.sign({ id: user.id, email }, JWT_SECRET);
+      return { token, user };
+    }
   },
 
   // Define our Date scalar, so we call getTime() and parse with moment.js
