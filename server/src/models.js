@@ -1,7 +1,6 @@
 // Create a Mongo Schema to help visualize the db structure
 
 const mongoose = require("mongoose");
-const moment = require("moment");
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
@@ -54,4 +53,12 @@ module.exports.User = buildModel("User", {
   team: { type: ObjectId, ref: "Team" },
   role: String,
   status: String
+});
+
+module.exports.Group = buildModel("Group", {
+  team: { type: ObjectId, ref: "team" },
+  name: String,
+  initials: String,
+  avatarColor: String,
+  users: [{ type: ObjectId, ref: "User" }]
 });

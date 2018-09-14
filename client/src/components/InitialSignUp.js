@@ -1,21 +1,10 @@
 import React, { Component, Fragment } from "react";
-import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
 import styled from "styled-components";
 import { validateEmail } from "../helpers/helpers";
 import { Button, Input, Typography, Label } from "@smooth-ui/core-sc";
 import { Link } from "@reach/router";
-
-// Create the GQL mutation for adding the email
-
-const CAPTURE_EMAIL = gql`
-  mutation($email: String!) {
-    captureEmail(email: $email) {
-      id
-      email
-    }
-  }
-`;
+import { CAPTURE_EMAIL } from "../constants/query";
 
 class InitialSignUp extends Component {
   state = {

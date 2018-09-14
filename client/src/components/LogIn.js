@@ -1,21 +1,10 @@
 import React, { Component } from "react";
-import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
 import styled from "styled-components";
 import { Button, Input, Typography, Label } from "@smooth-ui/core-sc";
 import { Link, navigate } from "@reach/router";
+import { LOG_IN } from "../constants/query";
 
-const LOG_IN = gql`
-  mutation LogIn($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
-      user {
-        id
-        email
-      }
-    }
-  }
-`;
 class LogIn extends Component {
   state = {
     email: "",
@@ -44,7 +33,8 @@ class LogIn extends Component {
           this.saveUserData(id, token);
           console.log("Success!");
           console.log(localStorage);
-          navigate("/main");
+          window.location.reload(true);
+          navigate("/");
         })
         .catch(error => {
           this.setState({ showInvalid: true });

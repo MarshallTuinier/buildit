@@ -1,24 +1,31 @@
 import React, { Component } from "react";
 import { Router } from "@reach/router";
+import styled from "styled-components";
+import { Query } from "react-apollo";
+
+import { GET_FOLDER } from "../constants/query.js";
 
 class Main extends Component {
   state = {};
   render() {
-    console.log(this.props.data.getTeam);
+    const { name, id } = this.props.data.getTeam;
     return (
-      <div>
-        <h1>This is the main</h1>
-        <Router>
-          <Page1 path="page1" />
-          <Page2 path="page2" />
-        </Router>
-      </div>
+      <Query query={GET_FOLDER} variables={{ id }}>
+        {data => {
+          console.log(data);
+          return (
+            <StyledMain>
+              <h1>{name}</h1>
+            </StyledMain>
+          );
+        }}
+      </Query>
     );
   }
 }
 
-const Page1 = () => <h2>page1</h2>;
-const Page2 = () => {
-  return <p>hello world</p>;
-};
+const StyledMain = styled.div`
+  padding: 2rem;
+`;
+
 export default Main;

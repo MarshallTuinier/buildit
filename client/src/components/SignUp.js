@@ -1,33 +1,10 @@
 import React, { Component } from "react";
-import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
 import styled from "styled-components";
 import { Button, Input, Label, Typography } from "@smooth-ui/core-sc";
 import { navigate } from "@reach/router";
 
-// GQL mutation for registering
-
-const SIGN_UP = gql`
-  mutation Signup(
-    $id: String!
-    $firstname: String!
-    $lastname: String!
-    $password: String!
-  ) {
-    signup(
-      id: $id
-      firstname: $firstname
-      lastname: $lastname
-      password: $password
-    ) {
-      token
-      user {
-        id
-        email
-      }
-    }
-  }
-`;
+import { SIGN_UP } from "../constants/query";
 
 class SignUp extends Component {
   state = {
