@@ -54,7 +54,7 @@ class SignUp extends Component {
           const id = signup.user.id;
           const token = signup.token;
           this.saveUserData(id, token);
-          navigate("/main");
+          navigate("/");
         })
         .catch(error => console.log(error));
     }

@@ -5,7 +5,7 @@ const moment = require("moment");
 const { User, Team } = require("./models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const { getUserId } = require("./utils");
 const nodeMailer = require("nodemailer");
 const { welcomeEmail } = require("./emails");
 
@@ -51,8 +51,10 @@ const avatarColors = [
 
 const resolvers = {
   Query: {
-    test(_, args, context) {
-      return "Hello World!!";
+    async getTeam(root, args, context) {
+      const userId = getUserId(context);
+      const user = await User.findById(userId);
+      return await Team.findById(user.team);
     }
   },
   Mutation: {

@@ -2,24 +2,57 @@ import React, { Component } from "react";
 import { ApolloProvider } from "react-apollo";
 import ApolloClient from "apollo-boost";
 import { Router } from "@reach/router";
-
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
 import InitialSignUp from "./components/InitialSignUp";
 import LogIn from "./components/LogIn";
 import SignUp from "./components/SignUp";
 import Main from "./components/Main";
 
-const client = new ApolloClient({});
+// Create an ApolloClient with middleware to add auth headers to each query
+
+const client = new ApolloClient({
+  request: operation => {
+    const token = localStorage.getItem("user-token");
+    operation.setContext({
+      headers: {
+        authorization: token ? `Bearer: ${token}` : ""
+      }
+    });
+  }
+});
+
+const GET_TEAM = gql`
+  query getTeam {
+    getTeam {
+      id
+      name
+    }
+  }
+`;
 
 class App extends Component {
   render() {
     return (
       <ApolloProvider client={client}>
-        <Router>
-          <InitialSignUp path="/" />
-          <SignUp path="/signup/:id" />
-          <LogIn path="/login" />
-          <Main path="/main" />
-        </Router>
+        <Query query={GET_TEAM}>
+          {({ loading, error, data }) => {
+            if (loading) return "Loading...";
+            if (error)
+              return (
+                <Router>
+                  <InitialSignUp path="/" />
+                  <SignUp path="/signup/:id" />
+                  <LogIn path="/login" />
+                </Router>
+              );
+            return (
+              <Router>
+                <Main path="//*" data={data} />
+              </Router>
+            );
+          }}
+        </Query>
       </ApolloProvider>
     );
   }
