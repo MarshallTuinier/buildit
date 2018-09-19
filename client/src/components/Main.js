@@ -11,8 +11,8 @@ class Main extends Component {
     const { name, id } = this.props.data.getTeam;
     return (
       <Query query={GET_FOLDER} variables={{ id }}>
-        {data => {
-          console.log(data);
+        {({ data: { getFolder } }) => {
+          console.log(getFolder);
           return (
             <StyledMain>
               <h1>{name}</h1>
@@ -26,6 +26,7 @@ class Main extends Component {
 
 const StyledMain = styled.div`
   padding: 2rem;
+  text-align: center;
 `;
 
 export default Main;

@@ -43,26 +43,11 @@ export const CAPTURE_EMAIL = gql`
   }
 `;
 
-export const GET_FOLDERS = gql`
-  query GetFolders($parent: String) {
-    getFolders(parent: $parent) {
+export const GET_USER = gql`
+  query GetUser($id: String!) {
+    getUser(id: $id) {
       id
       name
-      parent
-      description
-      shareWith
-    }
-  }
-`;
-
-export const GET_FOLDER = gql`
-  query GetFolder($id: String!) {
-    getFolder(id: $id) {
-      id
-      name
-      parent
-      description
-      shareWith
     }
   }
 `;

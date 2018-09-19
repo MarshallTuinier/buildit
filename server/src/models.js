@@ -24,11 +24,6 @@ const Folder = buildModel("Folder", {
 
 module.exports.Folder = Folder;
 
-module.exports.Team = Folder.discriminator(
-  "Team",
-  new Schema({}, { timestamps: true })
-);
-
 // Below we build the User model for the db
 
 module.exports.User = buildModel("User", {
@@ -53,12 +48,4 @@ module.exports.User = buildModel("User", {
   team: { type: ObjectId, ref: "Team" },
   role: String,
   status: String
-});
-
-module.exports.Group = buildModel("Group", {
-  team: { type: ObjectId, ref: "team" },
-  name: String,
-  initials: String,
-  avatarColor: String,
-  users: [{ type: ObjectId, ref: "User" }]
 });

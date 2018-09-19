@@ -2,7 +2,7 @@
 
 const { GraphQLScalarType } = require("graphql");
 const moment = require("moment");
-const { User, Team, Folder, Group } = require("./models");
+const { User } = require("./models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { getUserId } = require("./utils");
@@ -51,37 +51,10 @@ const avatarColors = [
 
 const resolvers = {
   Query: {
-    async getTeam(root, args, context) {
+    async getUser(root, args, context) {
       const userId = getUserId(context);
       const user = await User.findById(userId);
-      return await Team.findById(user.team);
-    },
-
-    // The getFolders query querys both root folders and sub folders. If the parent
-    // parameter is provided, it queries subfolders. If it isn't, it queries root folders
-    // that are shared with the user
-    async getFolders(root, { parent }, context) {
-      const userId = getUserId(context);
-      if (parent) {
-        return await Folder.find({ parent });
-      } else {
-        const user = await User.findById(userId);
-        const groups = await Group.find({ users: ObjectId(userId) }, "_id");
-        const ids = groups
-          .map(group => group._id)
-          .concat(
-            ["External User", "Collaborator"].includes(user.role)
-              ? [ObjectId(userId)]
-              : [ObjectId(userId), user.team]
-          );
-        return await Folder.find({ "shareWith.item": ids }).populate(
-          "shareWith"
-        );
-      }
-    },
-    async getFolder(root, { id }, context) {
-      const userId = getUserId(context);
-      return await Folder.findById(id).populate("shareWith");
+      return { user };
     }
   },
   Mutation: {
