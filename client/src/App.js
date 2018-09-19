@@ -22,9 +22,9 @@ const client = new ApolloClient({
   }
 });
 
-const GET_TEAM = gql`
-  query getTeam {
-    getTeam {
+const GET_USER = gql`
+  query GetUser {
+    getUser {
       id
       name
     }
@@ -35,7 +35,7 @@ class App extends Component {
   render() {
     return (
       <ApolloProvider client={client}>
-        <Query query={GET_TEAM}>
+        <Query query={GET_USER}>
           {({ loading, error, data }) => {
             if (loading) return "Loading...";
             if (error)

@@ -53,6 +53,7 @@ const resolvers = {
   Query: {
     async getUser(root, args, context) {
       const userId = getUserId(context);
+      console.log(userId);
       const user = await User.findById(userId);
       return { user };
     }

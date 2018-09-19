@@ -1,24 +1,15 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Query } from "react-apollo";
-
-import { GET_USER } from "../constants/query.js";
 
 class Main extends Component {
   state = {};
   render() {
-    const { name, id } = this.props.data.getTeam;
+    console.log(this.props);
+
     return (
-      <Query query={GET_USER} variables={{ id }}>
-        {({ data: { getUser } }) => {
-          console.log(getUser);
-          return (
-            <StyledMain>
-              <h1>{name}</h1>
-            </StyledMain>
-          );
-        }}
-      </Query>
+      <StyledMain>
+        <h1>Hi</h1>
+      </StyledMain>
     );
   }
 }

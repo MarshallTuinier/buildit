@@ -11,8 +11,7 @@ scalar JSON
 
 type Query {
   getTeam: Team
-  getFolders(parent: String): [Folder]
-  getFolder(id: String!): Folder
+  getUser: User
 }
 
 type Folder {
