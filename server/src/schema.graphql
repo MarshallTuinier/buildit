@@ -3,28 +3,8 @@
 # GraphQL does not have a default date, so we define one in the resolvers.js file
 scalar Date
 
-# shareWith in a folder can be a team, groups, or members, so  we can't definte
-# the type since there is no polymorphism in graphQL. so we need do define another new
-# scalar, calling this one JSON to be used in the Folder type
-
-scalar JSON
-
 type Query {
-  getTeam: Team
   getUser: User
-}
-
-type Folder {
-  id: String
-  name: String
-  parent: String
-  description: String
-  shareWith: [JSON]
-}
-
-type Team {
-  id: String
-  name: String
 }
 
 type Mutation {
@@ -46,7 +26,6 @@ type User {
   email: String
   avatarColor: String
   jobTitle: String
-  team: String
   role: String
   status: String
   createdAt: Date

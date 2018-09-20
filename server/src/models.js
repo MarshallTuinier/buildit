@@ -45,7 +45,6 @@ module.exports.User = buildModel("User", {
     default: ""
   },
   avatarColor: String,
-  team: { type: ObjectId, ref: "Team" },
   role: String,
   status: String
 });

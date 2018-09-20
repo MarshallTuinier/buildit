@@ -3,11 +3,11 @@ import { ApolloProvider } from "react-apollo";
 import ApolloClient from "apollo-boost";
 import { Router } from "@reach/router";
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 import InitialSignUp from "./components/InitialSignUp";
 import LogIn from "./components/LogIn";
 import SignUp from "./components/SignUp";
 import Main from "./components/Main";
+import { GET_USER } from "./constants/query";
 
 // Create an ApolloClient with middleware to add auth headers to each query
 
@@ -21,15 +21,6 @@ const client = new ApolloClient({
     });
   }
 });
-
-const GET_USER = gql`
-  query GetUser {
-    getUser {
-      id
-      name
-    }
-  }
-`;
 
 class App extends Component {
   render() {

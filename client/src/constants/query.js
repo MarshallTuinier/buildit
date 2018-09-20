@@ -44,8 +44,8 @@ export const CAPTURE_EMAIL = gql`
 `;
 
 export const GET_USER = gql`
-  query GetUser($id: String!) {
-    getUser(id: $id) {
+  query GetUser {
+    getUser {
       id
       name
     }

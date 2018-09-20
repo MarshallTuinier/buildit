@@ -4,11 +4,10 @@ import styled from "styled-components";
 class Main extends Component {
   state = {};
   render() {
-    console.log(this.props);
-
+    const { getUser } = this.props.data;
     return (
       <StyledMain>
-        <h1>Hi</h1>
+        <h1>Hi {getUser.name}</h1>
       </StyledMain>
     );
   }

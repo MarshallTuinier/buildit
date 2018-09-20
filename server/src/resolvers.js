@@ -53,9 +53,8 @@ const resolvers = {
   Query: {
     async getUser(root, args, context) {
       const userId = getUserId(context);
-      console.log(userId);
       const user = await User.findById(userId);
-      return { user };
+      return user;
     }
   },
   Mutation: {
@@ -86,18 +85,9 @@ const resolvers = {
         password: await bcrypt.hash(password, 10),
         status: "Active"
       };
-      if (user.role === "Owner") {
-        const team = await Team.create({
-          name: `${common.name}'s Team`
-        });
-        user.set({
-          ...common,
-          team: team.id,
-          jobTitle: "CEO/Owner/Founder"
-        });
-      } else {
-        user.set(common);
-      }
+
+      user.set(common);
+
       await user.save();
       const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET);
       return { token, user };
